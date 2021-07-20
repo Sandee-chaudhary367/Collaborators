@@ -14,6 +14,9 @@ app.use(express.json())
 app.use(userRoutes);
 app.use(taskRoutes);
 
+if(process.env.NODE_ENV=="production"){
+  app.use(express.static("collab-frontend/build"));
+}
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

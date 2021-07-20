@@ -15,10 +15,12 @@
   "scripts": {
     "dev": "nodemon collab-backend/index.js",
     "client": "cd collab-frontend && npm start",
-    "start": "concurrently \"npm run dev\" \"npm run client\""
+    "start": "node app.js",
+    "heroku-postbuild":"NPM_CONFIG_PRODUCTION=false npm install --prefix collab-frontend && npm run build --prefix collab-frontend"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": ""
 }
+
