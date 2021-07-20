@@ -25,7 +25,7 @@ const SignIn=({setuser})=>{
       const {...data}=formData;
       console.log(data);
 
-      const response=await axios.post(API_URL + "/login", data);
+      const response=await axios.post(API_URL + "login", data);
       console.log(response.data)
       if (response.data.Token) {
         localStorage.setItem("user", JSON.stringify(response.data.Token));
