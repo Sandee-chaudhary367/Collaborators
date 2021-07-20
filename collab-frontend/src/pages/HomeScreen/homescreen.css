@@ -1,0 +1,22 @@
+.homeCSS{
+    height: 100vh; 
+    display:flex;
+    flex-direction:row;
+    width: 100vw;
+}
+
+.homeCSS2{
+    height: 100vh; 
+    display:flex;
+    flex-direction:row;
+    justify-content: center;
+    padding:  50px 0;
+    width: 100vw;
+}
+
+.pop{
+    position:absolute;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.932);
+}
