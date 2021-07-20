@@ -32,7 +32,7 @@ const App=({setuser})=> {
 
   const CheckToken=async()=>{
     try{
-    const API_URL = "http://localhost:3001/";
+    const API_URL = "https://deep-collaborators.herokuapp.com/";
     const response=await axios.get(API_URL + "myProfile",{ headers: authHeader() });
     await setuser(response.data)
     setLoading(false);

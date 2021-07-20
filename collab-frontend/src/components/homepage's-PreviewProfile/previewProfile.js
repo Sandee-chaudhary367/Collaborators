@@ -32,7 +32,7 @@ const PreviewProfile=({user,setTasks})=>{
       try{
       let dat=new Date();
       const date= `${dat.getFullYear()}-${ String(dat.getMonth()+1).padStart(2, '0')}-${String(dat.getDate()).padStart(2, '0')}`;
-      const API_URL = "http://localhost:3001/";
+      const API_URL = "https://deep-collaborators.herokuapp.com/";
       const response=await axios.get(API_URL + "todayDeadlines/"+date,{ headers: authHeader() });
           setTask(response.data)
           setLoading(false);
@@ -44,7 +44,7 @@ const PreviewProfile=({user,setTasks})=>{
 
   const showThisDateDeadline=async(value,e)=>{
     const date= `${value.getFullYear()}-${ String(value.getMonth()+1).padStart(2, '0')}-${String(value.getDate()).padStart(2, '0')}`;
-   const API_URL = "http://localhost:3001/";
+   const API_URL = "https://deep-collaborators.herokuapp.com/";
    const response=await axios.get(API_URL + "todayDeadlines/"+date,{ headers: authHeader() });
    setTask(response.data)
  }

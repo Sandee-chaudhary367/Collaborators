@@ -7,7 +7,7 @@ import { setCurrentUser } from "../../redux/user/user.action";
 
 const SignUp=({history,setuser})=>{
 
-  const API_URL = "http://localhost:3001/";
+  const API_URL = "https://deep-collaborators.herokuapp.com/";
 
   const [formData, updateFormData] = useState({});
   const[message,setmessage]=useState("");
@@ -43,6 +43,7 @@ const SignUp=({history,setuser})=>{
 
     } catch (error) {
       console.log(error)
+      
     }
 }
 
