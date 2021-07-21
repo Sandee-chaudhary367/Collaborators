@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import TaskShow from "../TaskShow/TaskShow";
 import TaskCard from "../TaskCard/TaskCard";
+import {API_URL} from "../../variables"
 
 function authHeader() {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -33,7 +34,6 @@ const PreviewTasks=({user})=>{
 
     const loadTask=async()=>{
         try{
-        const API_URL = "https://deep-collaborators.herokuapp.com/";
         const response=await axios.get(API_URL + url,{ headers: authHeader() });
             setTask(response.data)
             setLoading(false);
@@ -60,7 +60,6 @@ const PreviewTasks=({user})=>{
             setSearchMode(!searchMode);  
             return;
         }
-        const API_URL = "https://deep-collaborators.herokuapp.com/";
         const response=await axios.post(API_URL + "searchTasks",{searchString:topic},{ headers: authHeader() });
         setTask2(response.data)
         setSearchMode(!searchMode);

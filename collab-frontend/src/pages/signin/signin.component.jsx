@@ -4,12 +4,11 @@ import axios from "axios";
 import { connect } from 'react-redux';
 import { setCurrentUser } from "../../redux/user/user.action";
 import {useHistory,Link} from 'react-router-dom';
-
+import {API_URL} from "../../variables"
 
 
 const SignIn=({setuser})=>{
   const [formData, updateFormData] = useState({});
-  const API_URL = "https://deep-collaborators.herokuapp.com/";
   const history = useHistory()
   const handleChange = (e) => {
       updateFormData({

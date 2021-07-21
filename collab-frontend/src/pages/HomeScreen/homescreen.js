@@ -5,7 +5,7 @@ import "./homescreen.css"
 import { setTasks } from '../../redux/popup/popup.action';
 import axios from "axios";
 import React, { useState } from 'react';
-
+import {API_URL} from "../../variables"
 
 function authHeader() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -32,7 +32,6 @@ const HomeScreen=({addtask,user,setTasks})=>{
   const AddPartnerHandler=async(e)=>{
     let email=textInput.current.value;
     console.log(email)
-    const API_URL = "https://deep-collaborators.herokuapp.com/";
     const response=await axios.get(API_URL + "find/"+email,{ headers: authHeader() });
     console.log(response.data)
     setpartnerArr([...partnersArr,response.data]);
@@ -56,7 +55,6 @@ const HomeScreen=({addtask,user,setTasks})=>{
     console.log(arr);
     const newFormData={...formData,partner:arr,owner:user._id}
     console.log(newFormData)
-    const API_URL = "https://deep-collaborators.herokuapp.com/";
     const response=await axios.post(API_URL + "addTask",newFormData,{ headers: authHeader() });
     alert("Done");
     hideAddtask();

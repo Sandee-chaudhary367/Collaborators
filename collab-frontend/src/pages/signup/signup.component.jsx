@@ -3,11 +3,9 @@ import {HomePageContainer,Heading} from '../homepage/homepage.styles'
 import axios from "axios";
 import { connect } from 'react-redux';
 import { setCurrentUser } from "../../redux/user/user.action";
-
+import {API_URL} from "../../variables"
 
 const SignUp=({history,setuser})=>{
-
-  const API_URL = "https://deep-collaborators.herokuapp.com/";
 
   const [formData, updateFormData] = useState({});
   const[message,setmessage]=useState("");

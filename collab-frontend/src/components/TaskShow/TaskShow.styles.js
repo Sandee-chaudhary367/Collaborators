@@ -18,7 +18,8 @@ overflow-y:auto;
 }
 
 
-max-height:${props=>props.ss==="TaskCard"?"330px":"130px"};
+/* max-height:${props=>props.ss==="TaskCard"?"130px":"130px"}; */
+max-height:330px;
 display: flex;
 flex-direction: column;
 font-weight: 560;

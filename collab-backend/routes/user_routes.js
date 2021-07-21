@@ -5,6 +5,8 @@ const user = require('../models/user');
 
 const router=new express.Router();
 
+
+
 router.get("/find/:email",auth,async(req,res)=>{
     try{
         console.log(req.params.email)

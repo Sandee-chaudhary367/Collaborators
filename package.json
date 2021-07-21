@@ -18,6 +18,7 @@
     "start": "node collab-backend/index.js",
     "heroku-postbuild":"NPM_CONFIG_PRODUCTION=false npm install --prefix collab-frontend && npm run build --prefix collab-frontend"
   },
+  
   "keywords": [],
   "author": "",
   "license": "ISC",

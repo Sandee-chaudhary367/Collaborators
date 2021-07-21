@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import axios from "axios";
 import PrivateRoutes from './components/PrivateRoutes'
 import PrivateRoutes2 from './components/PrivateRoutes2'
+import {API_URL} from "./variables"
 
 
 function authHeader() {
@@ -32,7 +33,6 @@ const App=({setuser})=> {
 
   const CheckToken=async()=>{
     try{
-    const API_URL = "https://deep-collaborators.herokuapp.com/";
     const response=await axios.get(API_URL + "myProfile",{ headers: authHeader() });
     await setuser(response.data)
     setLoading(false);
