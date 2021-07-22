@@ -36,7 +36,7 @@ export const Tabs=styled.p`
      margin: 0;
     font-weight: 700;
     font-size: 13px;
-    color:${props=> props.active?"gold":"rgb(97, 97, 97)"};
+    color:${props=> props.active?"darkblue":"rgb(97, 97, 97)"};
   cursor: pointer;
 `
 

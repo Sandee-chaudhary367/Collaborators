@@ -17,3 +17,16 @@ export const NavheadingContainer=styled.div`
     min-width: 250px;
     padding: 140px 20px 20px 0;
 `
+
+export const AddTask=styled.button`
+    border-radius: 5px;
+    border: none;
+    min-width: 180px;
+    cursor: pointer;
+    height: 40px;
+    font-weight: 400;
+    font-size: 1rem;
+    font-family: 'Lato', sans-serif;
+    background-color: #000;
+    color: #fff;
+`

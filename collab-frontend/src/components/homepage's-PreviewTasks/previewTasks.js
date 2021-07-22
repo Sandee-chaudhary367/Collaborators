@@ -100,7 +100,7 @@ const PreviewTasks=({user})=>{
         </TaskTabs>
 
         {Loading ? null:
-        <TaskShow Component={TaskCard} task={task}></TaskShow>
+        <TaskShow task={task}></TaskShow>
         }
         </div>
     }

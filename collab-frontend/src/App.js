@@ -52,8 +52,8 @@ const App=({setuser})=> {
     <div className="App">
     {Loading ? null:
     <Switch>
-    <Route path='/login' component={SignIn} />
-    <Route path='/signup' component={SignUp} />
+    <PrivateRoutes2 path='/login' component={SignIn} />
+    <PrivateRoutes2 path='/signup' component={SignUp} />
     <Route  path='/' component={HomeScreen} />
     </Switch>
     }

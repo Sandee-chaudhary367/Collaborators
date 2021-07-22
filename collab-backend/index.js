@@ -5,7 +5,7 @@ taskRoutes=require("./routes/task_routes")
 const app = express();
 const cors = require("cors");
 var corsOptions = {
-     origin:"https://deep-collaborators.herokuapp.com/"
+    origin:"https://deep-collaborators.herokuapp.com/"
 }
 app.use(cors(corsOptions));
 const PORT = process.env.PORT || 3001;

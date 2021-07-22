@@ -4,6 +4,7 @@ import axios from "axios";
 import { connect } from 'react-redux';
 import { setCurrentUser } from "../../redux/user/user.action";
 import {API_URL} from "../../variables"
+import {Link} from 'react-router-dom';
 
 const SignUp=({history,setuser})=>{
 
@@ -49,7 +50,7 @@ const SignUp=({history,setuser})=>{
   return(
   <HomePageContainer>
   <Heading>Sign Up</Heading>
-  <div className="card mt-3">
+  <div className="card mt-3" style={{background:"transparent",border:"solid 2px darkblue"}}>
   <div className="card-body">
   <form  onSubmit={handleSubmit}>
   <div className="form-group">
@@ -82,8 +83,14 @@ const SignUp=({history,setuser})=>{
     <label>Confirm Password</label>
     <input type="password" className="form-control" name="conpassword" onChange={handleChange} required id="exampleInputPassword2" placeholder="Password"/>
   </div>
+  <br></br>
+  <div class="d-flex justify-content-between">
   <button type="submit" className="btn btn-primary">Submit</button>
+  <Link  style={{paddingTop:"12px"}} to="/login">Sign in</Link>
+  </div>
+ 
   </form>
+
   </div>
   </div>
   {message && <div>

@@ -5,10 +5,9 @@ import axios from "axios";
 import 'react-calendar/dist/Calendar.css';
 import { setTasks } from "../../redux/popup/popup.action";
 import { useEffect, useState } from "react";
-import TaskCard2 from "../TaskCard/TaskCard2";
-import TaskShow from "../TaskShow/TaskShow"; 
 import "./preview.style.css"
 import {API_URL} from "../../variables"
+import TaskShow2 from "../TaskShow/TaskShow2";
 
 function authHeader() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -48,6 +47,8 @@ const PreviewProfile=({user,setTasks})=>{
    setTask(response.data)
  }
 
+ const WeekendColor=({ activeStartDate, date, view }) => (date.getDay() === 0 || date.getDay() === 6)  ? "wed" : null;
+
   useEffect(()=>{
      loadTask();
   },[])
@@ -72,12 +73,12 @@ const PreviewProfile=({user,setTasks})=>{
         </div>
 
         <div style={{margin:"10px 0 10px 0"}}>
-        <Calendar onClickDay={showThisDateDeadline} view="month" className="back" value={value} />
+        <Calendar hover tileClassName={WeekendColor} onClickDay={showThisDateDeadline} view="month" className="back wed" value={value} />
         </div>
 
         {Loading ? null:
-          <TaskShow Component={TaskCard2} task={task}></TaskShow>
-          }
+          <TaskShow2 task={task}></TaskShow2>
+        }
 
         </div>
     );

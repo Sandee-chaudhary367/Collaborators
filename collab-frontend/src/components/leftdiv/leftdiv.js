@@ -1,15 +1,28 @@
-import {Navheading, NavheadingContainer } from "./leftdiv.styles"
+import {Navheading, NavheadingContainer,AddTask } from "./leftdiv.styles"
 import Dashboard from '../../Image/Dashboard.png';
 import analytics from '../../Image/analytics.png';
 import team from '../../Image/team.png';
 import documents from '../../Image/documents.png';
 import settings from '../../Image/settings.png';
-import {Link} from "react-router-dom"
+import {useHistory,Link} from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Logout } from '../../redux/user/user.action';
 
 
-const LeftDiv=()=>{
+const LeftDiv=({logoutUser})=>{
     let imgStyle={ width:"48px",height:"30px",padding:" 0 10px"}
+    const history = useHistory();
+
+    const logou=()=>{
+        localStorage.setItem("user","");
+        logoutUser();
+        history.push("/login")
+
+    }
+
     return (
+
+        <div style={{display:"flex",flexDirection:"column",justifyContent:"space-between",alignItems:"center"}}>
         
         <NavheadingContainer>
         <Navheading active={  window.location.pathname === '/' }><img style={imgStyle} src={Dashboard} alt="" /><Link style={{color:`${window.location.pathname === '/'?"white":"black"}`,textDecoration:"none",fontSize:"13px"}} to="/">Dashboard</Link></Navheading>
@@ -19,7 +32,21 @@ const LeftDiv=()=>{
         <Navheading active={  window.location.pathname === '/settings' }><img style={imgStyle} src={settings} alt="" /><Link style={{color:`${window.location.pathname === '/settings'?"white":"black"}`,textDecoration:"none",fontSize:"13px"}} to="/settings">Settings</Link></Navheading>
         </NavheadingContainer>
         
+        <div style={{ marginBottom: "32px"}}>
+         <div style={{padding:"6px",border:"solid 1px black"}}>   
+         <AddTask id="lg" onClick={logou} type="button">LOGOUT</AddTask>
+         </div>
+        </div>
+        </div>
     )
 }
 
-export default LeftDiv
+const mapDispatchToProps = (dispatch) => {
+    return {
+      logoutUser: () => {
+        dispatch(Logout())
+      }
+    }
+}
+
+export default connect(null,mapDispatchToProps)(LeftDiv);

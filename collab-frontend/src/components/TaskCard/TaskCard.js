@@ -16,10 +16,10 @@ const TaskCard=({data})=>{
     <div>
     <div style={{display:'flex',justifyContent:"space-between"}}>
     <p style={{fontSize:"0.8rem",padding:"0 0 7px 0",margin:0}}>Progress</p>
-    <p style={{fontSize:"0.8rem",color:"gold",padding:"0 0 7px 0",margin:0}}>{data.completion}%</p>
+    <p style={{fontSize:"0.8rem",color:"darkblue",padding:"0 0 7px 0",margin:0}}>{data.completion}%</p>
     </div>
     <div style={{height:"6px"}} class="progress">
-    <div class="progress-bar bg-warning" role="progressbar" style={{width: `${data.completion}%`}} aria-valuenow={data.completion} aria-valuemin="0" aria-valuemax="100"></div>
+    <div class="progress-bar" role="progressbar" style={{background:"darkblue",width: `${data.completion}%`}} aria-valuenow={data.completion} aria-valuemin="0" aria-valuemax="100"></div>
     </div>
     </div>
     </div>

@@ -7,7 +7,7 @@ const TaskCard2=({data})=>{
     <div>
     <div style={{display:'flex',justifyContent:"space-between"}}>
     <p style={{fontSize:"0.8rem",padding:0,margin:0}}>{data.topic.toUpperCase()}</p>
-    <p style={{fontSize:"0.8rem",color:"gold",padding:"0",margin:0}}>{data.completion}%</p>
+    <p style={{fontSize:"0.8rem",color:"darkblue",padding:"0",margin:0}}>{data.completion}%</p>
     </div>
     </div>
   </div>

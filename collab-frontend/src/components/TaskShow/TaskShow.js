@@ -1,14 +1,15 @@
+import TaskCard from "../TaskCard/TaskCard";
 import {TaskContainer} from "./TaskShow.styles"
 
-let TaskShow=({task,Component})=>{
-    console.log(Component.name);
+let TaskShow=({task})=>{
+    
     return (
-    <TaskContainer ss={Component.name}>
+    <TaskContainer>
         { task.length!==0 ? task.map((el,i)=>(
-                <Component data={task[i]}></Component>
+                <TaskCard data={task[i]}></TaskCard>
         )):
-        <div style={{height:`${Component.name==="TaskCard" ? "550px":"200px"}`,margin:`${Component.name==="TaskCard"?"130px auto":"43px auto"}`}}>
-        {Component.name==="TaskCard" ?  "No Task":"No deadlines today"}
+        <div style={{height:"550px",margin:"130px auto"}}>
+        No Task
         </div>
     }
     </TaskContainer>
