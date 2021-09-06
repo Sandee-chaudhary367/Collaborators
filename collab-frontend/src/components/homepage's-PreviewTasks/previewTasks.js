@@ -22,7 +22,9 @@ function authHeader() {
 
 const PreviewTasks=({user})=>{
     let PreviewTasksStyles={
-        width:"58%",  
+        width:"58%",
+        maxWidth:"592px",
+        minWidth:"450px",  
     }
 
     let textInput = React.createRef();
@@ -78,7 +80,7 @@ const PreviewTasks=({user})=>{
         <BoldText>8 tasks today 📄</BoldText>
         </Greeter>
 
-        <div  style={{width:"600px", paddingLeft:"10px"}} class="input-group mt-4 mb-1">
+        <div  style={{width:"100%",maxWidth:"592px",minWidth:"450px", paddingLeft:"10px"}} class="input-group mt-4 mb-1">
         <input type="text" ref={textInput} class="form-control" placeholder="Search Tasks"/>
         <div class="input-group-append">
           <span class="input-group-text" onClick={enableSearchMode} id="basic-addon2">{searchMode?"x":"-->"}</span>

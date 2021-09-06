@@ -1,4 +1,4 @@
-import { PartnerImage} from "./taskCard.styles"
+import {PartnerImage} from "./taskCard.styles"
 const TaskCard2=({data})=>{
  
    return (

@@ -17,7 +17,7 @@ overflow-y:auto;
   border-radius: 10px;
 }
 
-max-height: 169px;
+max-height: 125px;
 display: flex;
 flex-direction: column;
 font-weight: 560;
@@ -43,7 +43,8 @@ overflow-y:auto;
 }
 
 
-max-height: 360px;
+max-height: 350px;
+min-width:450px ;
 display: flex;
 flex-direction: column;
 font-weight: 560;

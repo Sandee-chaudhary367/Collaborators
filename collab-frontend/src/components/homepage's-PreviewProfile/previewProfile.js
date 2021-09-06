@@ -57,10 +57,10 @@ const PreviewProfile=({user,setTasks})=>{
     }
 
     return (
-        <div style={{padding:"0 0 0 45px"}}>
+        <div style={{padding:"0 22px 0 22px"}}>
         <ProfileViewer>
-        <ProfileImage></ProfileImage>
-        <div style={{display:"flex",flexDirection:"column",padding:"10px 10px 0 10px "}}>
+        <ProfileImage src={`${API_URL}getProfilepic/${user.profilePic}`}></ProfileImage>
+        <div style={{display:"flex",flexDirection:"column",padding:"10px 5px 5px 10px "}}>
         <ProfileText style={{fontWeight:"600"}}>{user.name}</ProfileText>
         <ProfileText style={{color:"grey"}}>{user.designation}</ProfileText>
         </div>

@@ -36,7 +36,7 @@ const userSchema=new mongoose.Schema( {
     },
     friends:[{type:mongoose.Schema.Types.ObjectId,ref:'user'}],
     // team_tasks:[{type:mongoose.Schema.Types.ObjectId,ref:'task'}],
-    profilePic:Buffer,
+    profilePic:String,
     document:Buffer
 },{
     timestamps:true

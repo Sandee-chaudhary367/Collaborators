@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { Logout } from '../../redux/user/user.action';
 
 
-const LeftDiv=({logoutUser})=>{
+const LeftDiv=({sidebar,closeSidebar,logoutUser})=>{
     let imgStyle={ width:"48px",height:"30px",padding:" 0 10px"}
     const history = useHistory();
 
@@ -20,10 +20,15 @@ const LeftDiv=({logoutUser})=>{
 
     }
 
+    const closeSideBarFN=()=>{
+     
+      closeSidebar(false);
+      
+    }
     return (
 
-        <div style={{display:"flex",flexDirection:"column",justifyContent:"space-between",alignItems:"center"}}>
-        
+        <div style={{display:"flex",flexDirection:"column",justifyContent:"space-between",alignItems:"center",position:sidebar?"fixed":"",zIndex:sidebar?"11":"",background:sidebar?"grey":"",height:'100%'}}>
+        {sidebar && <h2 onClick={closeSideBarFN} style={{position:"absolute",left:"220px"}}>X</h2>}
         <NavheadingContainer>
         <Navheading active={  window.location.pathname === '/' }><img style={imgStyle} src={Dashboard} alt="" /><Link style={{color:`${window.location.pathname === '/'?"white":"black"}`,textDecoration:"none",fontSize:"13px"}} to="/">Dashboard</Link></Navheading>
         <Navheading active={  window.location.pathname === '/analytics' }><img style={imgStyle} src={analytics} alt="" /><Link style={{color:`${window.location.pathname === '/analytics'?"white":"black"}`,textDecoration:"none",fontSize:"13px"}}  to="/analytics">Analytics</Link></Navheading>

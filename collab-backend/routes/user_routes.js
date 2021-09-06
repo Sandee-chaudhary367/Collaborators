@@ -1,15 +1,24 @@
 const express = require('express');
 const auth = require('../middleware/auth');
 const user = require('../models/user');
-
+const upload=require("../index");
 
 const router=new express.Router();
 
 
-
-router.get("/find/:email",auth,async(req,res)=>{
+router.get("/getProfilepic/Image/:path",async(req,res)=>{
     try{
-        console.log(req.params.email)
+       let Imagepath="D:/ReactDevelopment/Collaborators/Image/"+req.params.path;
+       console.log(Imagepath);
+       res.sendFile(Imagepath);
+    }catch(e){
+        console.log(e);
+    }
+})
+
+router.get("/find/:email",auth,async(req,res) => {
+    try{
+        // console.log(req.params.email)
         const friend=await user.findOne({email:req.params.email});
         
         if(!friend){
@@ -20,10 +29,58 @@ router.get("/find/:email",auth,async(req,res)=>{
             console.log(i);
             console.log(friend._id)
             return i.equals(friend._id)});
-        console.log(yesFriend)
+        // console.log(yesFriend)
         if(!yesFriend){
             throw new Error();
         }
+        res.json(friend);
+    }catch(e){
+        console.log(e);
+        res.status(400).send(e);
+    }
+})
+
+router.get("/minInfo/:_id",auth,async(req,res)=>{
+    try{
+        const friend=await user.findOne({_id:req.params._id},{ _id: 1, name: 1 });
+        
+        if(!friend){
+            throw new Error();
+        }
+     
+        res.json(friend);
+    }catch(e){
+        console.log(e);
+        res.status(400).send(e);
+    }
+})
+
+
+
+router.get("/minInfoemail/:email",auth,async(req,res)=>{
+    try{
+        // console.log(req.params.email)
+        const friend=await user.find({email:req.params.email},{ _id: 1, name: 1 });
+        
+        if(!friend){
+            throw new Error();
+        }
+     
+        res.json(friend);
+    }catch(e){
+        console.log(e);
+        res.status(400).send(e);
+    }
+})
+
+router.get("/profile/:_id",async(req,res)=>{
+    try{
+        // console.log(req.params._id)
+        const friend=await user.findOne({_id:req.params._id});
+        if(!friend){
+            throw new Error();
+        }
+     
         res.json(friend);
     }catch(e){
         console.log(e);
@@ -44,7 +101,7 @@ router.get("/myProfile",auth,(req,res)=>{
 router.post("/addFriend",auth,async (req,res)=>{
     try{
     const friend2=await user.findOne({_id:req.body._id});
-    console.log(friend2);
+    // console.log(friend2);
         if(!friend2){
             throw new Error();
         }
@@ -52,13 +109,41 @@ router.post("/addFriend",auth,async (req,res)=>{
     req.user.friends.push(friend2._id);
     await req.user.save();
     await friend2.save();
-    res.send("Done")
+    res.json(req.user);
     }catch(e){
         console.log(e);
         res.status(400).send(e);
     }
 
 });
+
+router.post("/unFriend",auth,async (req,res)=>{
+    try{
+    const friend2=await user.findOne({_id:req.body._id});
+    // console.log(friend2);
+        if(!friend2){
+            throw new Error();
+        }
+    let a=friend2.friends.findIndex((el)=>el.equals(req.user._id));
+    if(a===-1){
+        return;
+    }
+     friend2.friends.splice(a,1);
+     let b=req.user.friends.findIndex((el)=>el.equals(friend2._id));
+     if(a===-1){
+        return;
+    }
+    req.user.friends.splice(b,1);
+    await req.user.save();
+    await friend2.save();
+    res.json(req.user);
+    }catch(e){
+        console.log(e);
+        res.status(400).send(e);
+    }
+});
+
+
 
 // router.post("/addteamtask",auth,async (req,res)=>{
 //     try{

@@ -19,7 +19,7 @@ const taskSchema=new mongoose.Schema( {
     deadline:{
         type:Date
     },
-    completion:{type:Number},
+    completion:{type:Number,default:0},
     partner:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"user"

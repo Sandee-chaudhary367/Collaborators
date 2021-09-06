@@ -104,6 +104,25 @@ router.get("/DeadlinesByDate",auth,async(req,res)=>{
     }
 })
 
+router.get("/TaskbyId/:_id",auth,async(req,res)=>{
+    try{
+    const _id=req.params._id
+    const user_id=req.user._id 
+    const userTask=await task.findOne({
+        $and:[{_id:_id},{$or:[{"owner" : user_id},{"partner": user_id}]}]
+    });
+    if(!userTask){
+        return;
+    }
+    res.send(userTask)
+    }catch(e){
+        console.log(e);
+        res.status(400).send(e);
+    }
+});
+
+
+
 router.get("/missedTasks",auth,async(req,res)=>{
     let now = new Date();
     let end = new Date(0);
@@ -232,6 +251,18 @@ router.get("/collabTasks",auth,async(req,res)=>{
 
     res.send(userAllTasks)
     
+    }catch(e){
+        console.log(e);
+        res.status(400).send(e);
+    }
+});
+
+router.delete("/deleteTasks/:_id",auth,async(req,res)=>{
+    try{
+      console.log(req.params._id)
+     let task_id=req.params._id;
+     await task.deleteOne({_id:task_id});
+     res.send("Done");
     }catch(e){
         console.log(e);
         res.status(400).send(e);

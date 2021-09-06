@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import "./homescreen.css"
 import { setTasks } from '../../redux/popup/popup.action';
 import axios from "axios";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {API_URL} from "../../variables"
 
 function authHeader() {
@@ -29,6 +29,23 @@ const HomeScreen=({addtask,user,setTasks})=>{
   let textInput = React.createRef();
   let [partnersArr,setpartnerArr]=useState([]);
   let [formData,setFormData]=useState({});
+  let [hid,sethid]=useState(false);
+  let [closeSidebar,setcloseSidebar]=useState(true);
+
+  const updateDimensions = () => {
+    const width = window.innerWidth
+    if(width<800){
+      sethid(true)
+      setcloseSidebar(false)
+    }else{
+      sethid(false)
+      setcloseSidebar(true)
+    }
+  }
+
+  window.addEventListener('resize', updateDimensions)
+
+useEffect(updateDimensions,[]);
   const AddPartnerHandler=async(e)=>{
     let email=textInput.current.value;
     console.log(email)
@@ -66,8 +83,8 @@ const HomeScreen=({addtask,user,setTasks})=>{
     return(
         <div >
         <div className="homeCSS">
-        <LeftDiv/>
-        <Content/>
+        {closeSidebar && <LeftDiv closeSidebar={setcloseSidebar} sidebar={hid}/>}
+        <Content sidebar={hid} closeSidebar={setcloseSidebar}/>
         </div>
         {addtask && 
             <div className="homeCSS2 pop" >
@@ -76,7 +93,7 @@ const HomeScreen=({addtask,user,setTasks})=>{
             <div class="card-header">
               Add a new Task
             </div>
-            <div style={{overflow:"auto",width:"800px"}} className="card-body">
+            <div style={{overflow:"auto",width:"90%",minWidth:"450px"}} className="card-body">
               
               <form id="my-form"> 
               <div >
@@ -92,7 +109,7 @@ const HomeScreen=({addtask,user,setTasks})=>{
               <div class="input-group mb-3">
                 <input ref={textInput} type="text" class="form-control" placeholder="Partner email" aria-label="Recipient's username"  aria-describedby="basic-addon2"/>
                 <div class="input-group-append">
-                  <button class="btn btn-outline-secondary" onClick={AddPartnerHandler} type="button">Add</button>
+                  <button class="btn btn-outline-secondary " onClick={AddPartnerHandler} type="button">Add</button>
                 </div>
               </div>
 
@@ -113,8 +130,6 @@ const HomeScreen=({addtask,user,setTasks})=>{
             <button type="button" form="my-form"  onClick={HandleSubmit} className="btn btn-outline-success">Submit</button>
          
           </div>
-        
-        
           </div>
           </div>
         }

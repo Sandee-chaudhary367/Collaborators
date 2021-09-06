@@ -11,8 +11,8 @@ export const TaskCardContainer=styled.div`
 `
 
 export const PartnerImage=styled.img`
-    width: 27px;
-    height: 27px;
+    width: 30px;
+    height: 30px;
     border-radius: 100%;
     border: solid 1px black;
     margin: 10px 0;
