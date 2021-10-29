@@ -7,7 +7,8 @@
     "mongoose": "^5.12.13",
     "multer": "^1.4.3",
     "nodemon": "^2.0.7",
-    "react-calendar": "^3.4.0"
+    "react-calendar": "^3.4.0",
+    "timeago.js": "^4.0.0-beta.3"
   },
   "name": "collaborators",
   "version": "1.0.0",
