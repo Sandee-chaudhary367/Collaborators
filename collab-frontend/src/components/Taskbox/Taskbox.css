@@ -1,5 +1,5 @@
 .chatBoxBottom {
-    margin-top: 5px;
+    margin-top: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -8,28 +8,43 @@
 .chatBoxTop {
     overflow-y:scroll;
     padding-right: 10px;
-    max-height: 400px;
+    max-height: 450px;
+    min-height: 450px;
     height: 100%;
 }
 
+.CheckBox{
+  overflow-y:scroll;
+  max-height: 510px;
+  min-height: 510px;
+}
+
+.CheckBox::-webkit-scrollbar {
+  display: none;
+}
+
+
 .chatBoxTop::-webkit-scrollbar {
-  width: 7px;
+  display: none;
 }
-::-webkit-scrollbar-track {
-  background: #f2f2f2;
-  border-radius: 10px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: black;
-  border-radius: 10px;
+.chatBoxTop{
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
+.noConversationText{
+  max-height: 450px;
+  min-height: 450px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+}
 
 .chatMessageInput {
-    width: 70%;
-    height: 80%;
+    width: 78%;
+    height: 40px;
+    
 }
   
 .chatSubmitButton {

@@ -6,6 +6,7 @@ import {API_URL} from "../../variables"
 import { PartnerImage} from "../TaskCard/taskCard.styles"
 import Message from "../message/Message.jsx"
 import {io} from "socket.io-client"
+import CheckBox from "../checkBox/checkbox.jsx";
 
 function authHeader(){
     const user = JSON.parse(localStorage.getItem("user"));
@@ -22,18 +23,43 @@ const Taskbox=({match,user})=>{
     let [messages,setMessages]=useState([]);
     let [currentChat, setCurrentChat] = useState(true);
     const [newMessage, setNewMessage] = useState("");
-    let scrollRef=useRef();
-    const [socket,setSocket]=useState(null);
+    const [arrivalMessage, setArrivalMessage] = useState(null);
 
-    // useEffect(()=>{
-    //   setSocket(io("ws://localhost:8900"));
-    // },[]);
-    
+    let scrollRef=useRef();
+    const socket=useRef();
+
+    //It tells the socket server the a user has been connect  
+    useEffect(() => {
+      socket.current = io("ws://localhost:8900");
+      socket.current.on("getMessage", (data) => {
+        console.log("getting message");
+        console.log(data);
+        setArrivalMessage({
+          sender: data.senderId,
+          text: data.text,
+          createdAt: Date.now(),
+        });
+      });
+    }, []);
+
+    useEffect(() => {
+      arrivalMessage && 
+        setMessages((prev) => [...prev, arrivalMessage]);
+    }, [arrivalMessage, data]);
+
+
+    useEffect(() => {
+      socket.current.emit("addUser", {
+        userId:user._id,
+        taskId:match.params._id
+      });
+    }, [user]);
+  
+
     const getMessages = async () => {
+      
       try {
         const res = await axios.get(API_URL+"messages/" + match.params._id);
-        console.log("res.data");
-        console.log(res.data);
         setMessages(res.data);
         if(res.data.length===0){
           return;
@@ -51,6 +77,27 @@ const Taskbox=({match,user})=>{
         text: newMessage,
         taskId: match.params._id,
       };
+
+      let groupMem=[...data.partner,data.owner]
+
+      const receiverId = groupMem.filter(
+        (member) => member !== user._id
+      );
+
+      console.log({
+        senderId: user._id,
+        receiverId,
+        text: newMessage,
+        taskId:match.params._id,
+      })
+
+      socket.current.emit("sendMessage", {
+        senderId: user._id,
+        receiverId,
+        text: newMessage,
+        taskId:match.params._id,
+      });
+
       try {
         const res = await axios.post(API_URL + "sendmessages", message);
         setMessages([...messages, res.data]);
@@ -68,7 +115,7 @@ const Taskbox=({match,user})=>{
 
     useEffect(() => {
       getMessages();
-    }, [currentChat]);
+    }, []);
 
     useEffect(() => {
       scrollRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -95,20 +142,21 @@ const Taskbox=({match,user})=>{
 
         <div style={{display:"flex"}} >
            
-            <div style={{flex:"6",backgroundColor:"lavender"}}>
-            Hello
+            <div style={{flex:"6",display:"flex",flexDirection:"column"}}>
+            <div className="CheckBox">
+                <CheckBox></CheckBox>
+            </div>
+           
             </div>
 
-            <div style={{flex:"3.3"}}>
-            <div style={{backgroundColor:"black",margin:"0 10px 0 0",color:"white",height:"32px"}}>
-            Discussion Box
-            </div>
-            <div className="chatBox" style={{padding:"10px"}}>
-            {currentChat ? (
+            <div style={{flex:"3.6"}}>
+            
+            {/*chatBox*/}
+            <div className="chatBox" style={{padding:"0 20px 10px 20px"}}>
+            { messages.length!==0 ? (
               <div>
                 <div className="chatBoxTop">
                   {messages.map((m) => {
-                    console.log(m);
                     return (
                       <div ref={scrollRef} >
                         <Message message={m} own={m.sender === user._id} />
@@ -116,7 +164,13 @@ const Taskbox=({match,user})=>{
                     )
                   })}
                 </div>
-                <div className="chatBoxBottom">
+                </div>
+            ) : (
+              <div className="noConversationText">
+                Open a conversation to start a chat.
+              </div>
+            )}
+            <div className="chatBoxBottom">
                   <textarea
                     className="chatMessageInput"
                     placeholder="write something..."
@@ -127,13 +181,9 @@ const Taskbox=({match,user})=>{
                     Send
                   </button>
                 </div>
-              </div>
-            ) : (
-              <span className="noConversationText">
-                Open a conversation to start a chat.
-              </span>
-            )}
+              
             </div>
+
             </div>
         
         </div>
