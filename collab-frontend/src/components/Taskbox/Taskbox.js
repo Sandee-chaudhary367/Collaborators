@@ -1,5 +1,6 @@
 import { useEffect,useRef,useState } from "react";
 import "./Taskbox.css";
+import "./TextArea.css"
 import axios from "axios";
 import { connect } from 'react-redux';
 import {API_URL} from "../../variables"
@@ -7,6 +8,7 @@ import { PartnerImage} from "../TaskCard/taskCard.styles"
 import Message from "../message/Message.jsx"
 import {io} from "socket.io-client"
 import CheckBox from "../checkBox/checkbox.jsx";
+import { format } from "timeago.js";
 
 function authHeader(){
     const user = JSON.parse(localStorage.getItem("user"));
@@ -123,26 +125,33 @@ const Taskbox=({match,user})=>{
   
     return (
         <div>
-        {loading && <div><div style={{display:"flex",alignItems:"baseline"}}>
+        {loading && <div><div style={{display:"flex",alignItems:"baseline",margin:"5px 13px"}}>
         <h1>{data.topic.toUpperCase()}</h1>
-        <h5 style={{padding:"0 10px 0 20px",fontSize:"16px",color:"darkblue"}}>Progress : {data.completion}%</h5>
-        <h5 style={{padding:"0 10px",fontSize:"16px",color:"darkblue"}}>Deadline : {data.deadline}</h5>
+        <h5 style={{padding:"0 10px",fontSize:"18px",color:"darkred"}}>(Deadline : {format(data.deadline)})</h5>
         </div>
-        <div style={{display:"flex"}}>
+        {/*<div style={{display:"flex"}}>
         <PartnerImage src={`${API_URL}getProfilepic/Image/${data.owner}`}/>
         {
         data.partner.map((el)=>{
             return (<PartnerImage src={`${API_URL}getProfilepic/Image/${el}`}/>)
         })
         }
-        </div>
+      </div>*/}
 
-        <p style={{fontSize:"16px",padding:0,margin:0}}>{data.description}</p>
+       {/*<p style={{fontSize:"16px",padding:0,margin:0}}>{data.description}</p>*/}
         </div>}
 
         <div style={{display:"flex"}} >
            
-            <div style={{flex:"6",display:"flex",flexDirection:"column"}}>
+            <div style={{flex:"6",display:"flex",flexDirection:"column",alignItems:"center"}}>
+            {
+              loading?<div style={{height:"138px",padding:"10px",width:"98%",background:"white", border:"solid 2px black", borderRadius: "1%"}}>
+              {<p style={{fontSize:"16px",padding:0,margin:0}}>{data.description}</p>}
+              </div>:<div>
+              
+              </div>
+            }
+            
             <div className="CheckBox">
                 <CheckBox></CheckBox>
             </div>
@@ -167,16 +176,11 @@ const Taskbox=({match,user})=>{
                 </div>
             ) : (
               <div className="noConversationText">
-                Open a conversation to start a chat.
+                Discuss here...
               </div>
             )}
             <div className="chatBoxBottom">
-                  <textarea
-                    className="chatMessageInput"
-                    placeholder="write something..."
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    value={newMessage}
-                  ></textarea>
+          <textarea class="form__input" id="name" onChange={(e) => setNewMessage(e.target.value)} value={newMessage} placeholder="write something..."/>
                   <button className="chatSubmitButton" onClick={handleSubmit}>
                     Send
                   </button>

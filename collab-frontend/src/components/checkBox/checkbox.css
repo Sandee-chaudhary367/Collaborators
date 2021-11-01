@@ -69,7 +69,7 @@ h2::after {
   display: block;
   position: relative;
   padding: 15px 0 15px 45px;
-  border-top: 1px dashed #fff;
+  border-top: 1px dashed rgb(0, 0, 0);
   order: 4;
   cursor: pointer;
   animation: undone .5s;
