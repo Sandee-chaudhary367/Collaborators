@@ -153,7 +153,7 @@ const Taskbox=({match,user})=>{
             }
             
             <div className="CheckBox">
-                <CheckBox></CheckBox>
+                <CheckBox taskId={match.params._id} ></CheckBox>
             </div>
            
             </div>

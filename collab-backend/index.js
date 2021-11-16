@@ -4,6 +4,8 @@ userRoutes=require("./routes/user_routes")
 taskRoutes=require("./routes/task_routes")
 requestRoutes=require("./routes/request_routes")
 messageRoutes=require("./routes/message_routes")
+subTaskRoutes=require("./routes/subtask_routes")
+
 const app = express();
 var multer = require('multer');
 const cors = require("cors");
@@ -20,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 app.use(userRoutes);
 app.use(taskRoutes);
+app.use(subTaskRoutes);
 app.use(requestRoutes);
 app.use(messageRoutes);
 
