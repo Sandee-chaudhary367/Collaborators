@@ -1,7 +1,20 @@
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import axios from "axios";
+import CalendarHeatmap from 'react-calendar-heatmap';
+import 'react-calendar-heatmap/dist/styles.css';
 import {API_URL} from "../../variables"
+
+let dat={"date": "2022-02-04",
+"total": 17164,
+"details": [{
+  "name": "Project 1",
+  "date": "2022-02-04 12:30:45",
+  "value": 9192
+}],"summary":[{
+  "name": "Project 1",
+  "value": 9192
+}]}
 
 function authHeader() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -13,7 +26,27 @@ function authHeader() {
 }
 
 const Profile=({user})=>{
-  //  console.log(user);
+  let heatmap=user.heatmap;
+  let array=[];
+
+  for(let i=0;i<12;i++){
+    for(let j=0;j<heatmap[i].length;j++){
+       let year=new Date().getFullYear();
+       let mm=i+1;
+       let dd=j+1;
+       let val=heatmap[i][j];
+       console.log(year+"-"+mm+"-"+dd+":"+val);
+       if(val===0){
+         continue;
+       }
+       let obj={
+         date:`${year}-${mm}-${dd}`,
+         count:val
+       }
+       array.push(obj);
+    }
+  }
+
   const [photo,setPhoto] =useState(null)
 
   function handlePhoto(e) {
@@ -34,6 +67,8 @@ const Profile=({user})=>{
   }
 
     return (
+    <div style={{height :"100vh",overflowY:"scroll"}}>
+   
     <div style={{margin:'40px 40px'}}>
     <div class="card">
     <div style={{display:"flex"}}>
@@ -57,15 +92,53 @@ const Profile=({user})=>{
     <a href="#" style={{background:"darkblue",color:"white"}} class="btn">Friends</a>
     </div>*/}
     
-    <div>
-    
-    </div>
-    </div>
-    
     </div>
     </div>
     </div>
     
+
+    <div style={{margin:'40px 0px'}}  >
+    <div class="card">
+    <CalendarHeatmap
+    startDate={new Date('2021-12-31')}
+    endDate={new Date('2022-12-31')}
+    values={array}
+    />
+    </div>
+    </div>
+
+    <div style={{margin:'40px 0px'}}  >
+    <div class="card">
+    <h5 class="card-title">Last 10 Task Completed</h5>
+    <div style={{height:"400px"}} >
+    <h5>
+    Mini task 1 Completed
+    </h5>
+    <h5 >
+    Mini task 1 Completed
+    </h5> 
+    <h5 >
+    Mini task 1 Completed
+    </h5> 
+    <h5 >
+    Mini task 1 Completed
+    </h5> 
+    <h5 >
+    Mini task 1 Completed
+    </h5> 
+    <h5 >
+    Mini task 1 Completed
+    </h5> 
+    </div>                             
+
+    </div>
+
+  
+    </div>
+
+
+    </div>
+    </div>
     )
 }
 const mapStateToProps=state=>(

@@ -1,10 +1,42 @@
 const express = require('express');
 const auth = require('../middleware/auth');
 const user = require('../models/user');
-const upload=require("../index");
+// const upload=require("../index");
+const heatmap=require("../models/heatmap");
 
 const router=new express.Router();
 
+router.put("/changeHeatdataOntrue",auth,async(req,res)=>{
+    let dd=new Date().getDate();
+    let mm=new Date().getMonth();
+    let val=req.user.heatmap[mm][dd-1]+1;
+    console.log(dd+" "+mm+" "+val);
+    user.findByIdAndUpdate(req.user._id,{"$set": {[`heatmap.${mm}.${dd-1}`]:val}},function(err,result){
+        if(err){
+            console.log(err);
+            res.status(400).send(err);
+        }else{
+         res.send("Done");
+        }
+    });
+})
+
+router.put("/changeHeatdataOnfalse",auth,async(req,res)=>{
+    let aa=req.body;
+    // console.log(aa);
+    let dd=new Date(`${aa.end}`).getDate();
+    let mm=new Date(`${aa.end}`).getMonth();
+    let val=req.user.heatmap[mm][dd-1]-1;
+    console.log(dd+" "+mm+" "+val);
+    user.findByIdAndUpdate(req.user._id,{"$set": {[`heatmap.${mm}.${dd-1}`]:val}},function(err,result){
+        if(err){
+            console.log(err);
+            res.status(400).send(err);
+        }else{
+         res.send("Done");
+        }
+    });
+})
 
 router.get("/getProfilepic/Image/:path",async(req,res)=>{
     try{
@@ -177,14 +209,54 @@ router.post("/login",async(req,res)=>{
     }
 })
 
+
+const isLeap = year => new Date(year, 1, 29).getDate() === 29;
+
+let Matrix = () => {
+    let presentYear=new Date().getFullYear();
+    let isLeapAnwser=isLeap(presentYear);
+
+    let arr2d=new Array(12);
+    arr2d[0]=new Array(31).fill(0);
+    if(isLeapAnwser){
+        arr2d[1]=new Array(29).fill(0);
+    }else{
+        arr2d[1]=new Array(28).fill(0);
+    }
+    arr2d[2]=new Array(31).fill(0);
+    arr2d[3]=new Array(30).fill(0);
+    arr2d[4]=new Array(31).fill(0);
+    arr2d[5]=new Array(30).fill(0);
+    arr2d[6]=new Array(31).fill(0);
+    arr2d[7]=new Array(31).fill(0);
+    arr2d[8]=new Array(30).fill(0);
+    arr2d[9]=new Array(31).fill(0);
+    arr2d[10]=new Array(30).fill(0);
+    arr2d[11]=new Array(31).fill(0);
+    
+    return arr2d;
+  }
+
 router.post("/signup",async(req,res)=>{
     try{
+    let htMatrix=Matrix();
     const userInfo=req.body;
+    userInfo.heatmap=htMatrix;
     const newUser=new user(userInfo);
     await newUser.save();
     let token= await newUser.generateAuthToken();
     let newUserReturnable=newUser.toJSON();
     newUserReturnable.Token=token;
+    let userId = newUserReturnable._id;
+    
+    let htdata={
+        userId,
+        data:htMatrix
+    }
+    
+    const newHeatmap=new heatmap(htdata);
+
+    await newHeatmap.save();
     res.json(newUserReturnable);
     }catch(e){
         console.log(e);

@@ -34,7 +34,7 @@ router.put("/subTasksCompletionToTrue/:_id",auth,async(req,res)=>{
        if(err){
            console.log(err);
            res.status(400).send(err);
-       }else{
+       }else{  
         res.send("Done");
        }
    });
@@ -42,13 +42,17 @@ router.put("/subTasksCompletionToTrue/:_id",auth,async(req,res)=>{
 })
 
 router.put("/subTasksCompletionToFalse/:_id",auth,async(req,res)=>{
+    
+
 
     subTask.findByIdAndUpdate(req.params._id,{completion:false,end:null},function(err,result){
         if(err){
             console.log(err);
             res.status(400).send(err);
         }else{
-         res.send("Done");
+         console.log(result); 
+         let aa=result.end; 
+         res.json({end:aa});
         }
     });
      

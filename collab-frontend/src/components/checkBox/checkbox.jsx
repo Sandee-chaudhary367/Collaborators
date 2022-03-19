@@ -47,6 +47,7 @@ let CheckBox=(taskId)=>{
       try{
       console.log(e.target.id)
         const res = await axios.put(API_URL + "subTasksCompletionToTrue/"+e.target.id,null,{ headers: authHeader() });
+        const res1 = await axios.put(API_URL + "changeHeatdataOntrue",null,{ headers: authHeader() });
         getSubTasks();
       }catch(err){
         console.log(err);
@@ -57,6 +58,8 @@ let CheckBox=(taskId)=>{
       try{
        // console.log(e.target.id)
         const res = await axios.put(API_URL + "subTasksCompletionToFalse/"+e.target.id,null,{headers: authHeader()});
+        let aa={end:res.data.end};
+        const res1 = await axios.put(API_URL + "changeHeatdataOnfalse",aa,{ headers: authHeader() });
         getSubTasks();
       }catch(err){
         console.log(err);
