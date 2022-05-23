@@ -18,7 +18,6 @@ const Message = require('../models/message');
   
   router.get("/messages/:taskId", async (req, res) => {
     try {
-        console.log("hello");
       const messages = await Message.find({
         taskId: req.params.taskId,
       });

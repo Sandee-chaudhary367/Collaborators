@@ -1,0 +1,45 @@
+
+.document {
+    display: flex;
+    flex-direction: column;
+   margin-top: 5px;
+   border-top: solid 2px;
+   
+  }
+  
+  .documentTop{
+      display: flex;
+     
+  }
+  
+  .documentImg {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+  
+  .documentText{
+      padding: 10px 5px 10px 5px;
+      border-radius: 10px;
+      font-size: 16.5px;
+     
+      
+      max-width: 300px;
+  }
+  
+  .documentBottom{
+      font-size: 12px;
+      display: flex;
+      
+  }
+  
+  .document.own{
+      align-items: flex-end;
+  }
+  
+  .document.own .documentText{
+      background-color: rgb(245, 241, 241);
+      color: black;
+  }

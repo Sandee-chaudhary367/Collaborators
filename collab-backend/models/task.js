@@ -24,7 +24,7 @@ const taskSchema=new mongoose.Schema( {
         type:mongoose.Schema.Types.ObjectId,
         ref:"user"
     }],
-    document:[Buffer],
+    document:[String],
     link:[String]
 },{
     timestamps:true

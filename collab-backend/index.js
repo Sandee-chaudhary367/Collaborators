@@ -5,7 +5,8 @@ taskRoutes=require("./routes/task_routes")
 requestRoutes=require("./routes/request_routes")
 messageRoutes=require("./routes/message_routes")
 subTaskRoutes=require("./routes/subtask_routes")
-
+documentRoutes=require("./routes/documents_routes")
+const task = require('./models/task');
 const app = express();
 var multer = require('multer');
 const cors = require("cors");
@@ -17,7 +18,6 @@ var corsOptions = {
 }
 app.use(cors(corsOptions));
 const PORT = process.env.PORT || 3001;
-// app.use("./CollabPics",express.static("upload"));
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.json())
 app.use(userRoutes);
@@ -25,7 +25,7 @@ app.use(taskRoutes);
 app.use(subTaskRoutes);
 app.use(requestRoutes);
 app.use(messageRoutes);
-
+app.use(documentRoutes);
 
 
 var storage = multer.diskStorage({
@@ -36,23 +36,46 @@ var storage = multer.diskStorage({
         cb(null, `${req.user._id}`)
     }
 });
- 
-const fileFilter = (req, file, cb) => {
-  const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-  if(allowedFileTypes.includes(file.mimetype)) {
-      cb(null, true);
-  } else {
-      cb(null, false);
-  }
-}
 
-let upload = multer({storage});
+let storagefile = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './File/')
+    }
+    //for now filename is randomly genrated 
+});
+ 
+// const fileFilter = (req, file, cb) => {
+//   const allowedFileTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+//   if(allowedFileTypes.includes(file.mimetype)) {
+//       cb(null, true);
+//   } else {
+//       cb(null, false);
+//   }
+// }
+
+let uploadfiles = multer({storage:storagefile});
+let upload = multer({storage:storage});
 
 
 userRoutes.post('/addProfilePic',[auth,upload.single("ProfilePic")],async(req, res) => {
     try{
         await user.updateOne({_id:req.user._id},{$set:{"profilePic":req.file.path}});
         res.send("done")
+    }
+    catch(e){
+        console.log(e);
+        res.status(400).send(e);
+    }          
+});
+
+taskRoutes.post('/addFile',uploadfiles.single("myFile"),async(req, res) => {
+    try{
+        
+        console.log(req.file);
+        let obj= await task.findByIdAndUpdate(req.body._id, {$push:{document:req.file.path}},{useFindAndModify: false});
+        obj.document.push(req.file.path);
+        console.log(obj);
+        res.send(obj);
     }
     catch(e){
         console.log(e);

@@ -4,8 +4,8 @@ import "./TextArea.css"
 import axios from "axios";
 import { connect } from 'react-redux';
 import {API_URL} from "../../variables"
-import { PartnerImage} from "../TaskCard/taskCard.styles"
 import Message from "../message/Message.jsx"
+import Document from "../document/Document.jsx"
 import {io} from "socket.io-client"
 import CheckBox from "../checkBox/checkbox.jsx";
 import { format } from "timeago.js";
@@ -26,9 +26,41 @@ const Taskbox=({match,user})=>{
     let [currentChat, setCurrentChat] = useState(true);
     const [newMessage, setNewMessage] = useState("");
     const [arrivalMessage, setArrivalMessage] = useState(null);
-
+    const [Docbar,setDocbar]=useState(false);
+    const [docShow,setdocShow]=useState([]);
+    const [file,setFile] =useState(null)
     let scrollRef=useRef();
     const socket=useRef();
+
+    function handleFile(e) {
+      setFile(e.target.files[0]);
+    }
+
+    let SubmitFile=async()=>{
+      console.log(file.name);
+      let ss=file.name.split(".");
+      let fileName=ss[0];
+      console.log(fileName);
+
+      const formData = new FormData();
+      formData.append('myFile', file);
+      formData.append('_id',data._id);
+      try{
+      const res=await axios.post(API_URL + "addFile",formData,{ headers: authHeader()});
+      let documentobj={
+        path:res.data.document[res.data.document.length-1],
+        type:file.type,
+        owner:res.data.owner,
+        partner:res.data.partner,
+        task:res.data._id,
+        fileName
+      }
+      await axios.post(API_URL + "addDocument",documentobj,{ headers: authHeader()});
+      window.location.reload();
+      }catch(e){
+        console.log(e);
+      }
+    }
 
     //It tells the socket server the a user has been connect  
     useEffect(() => {
@@ -56,7 +88,7 @@ const Taskbox=({match,user})=>{
         taskId:match.params._id
       });
     }, [user]);
-  
+
 
     const getMessages = async () => {
       
@@ -67,6 +99,18 @@ const Taskbox=({match,user})=>{
           return;
         }
         setCurrentChat(true);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    const getDocument = async () => {
+      try {
+        const res = await axios.get(API_URL+"documents/" + match.params._id);
+        setdocShow(res.data);
+        if(res.data.length===0){
+          return;
+        }
       } catch (err) {
         console.log(err);
       }
@@ -120,6 +164,11 @@ const Taskbox=({match,user})=>{
     }, []);
 
     useEffect(() => {
+      getDocument();
+    }, []);
+
+
+    useEffect(() => {
       scrollRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
   
@@ -160,35 +209,66 @@ const Taskbox=({match,user})=>{
 
             <div style={{flex:"3.6"}}>
             
-            {/*chatBox*/}
-            <div className="chatBox" style={{padding:"0 20px 10px 20px"}}>
-            { messages.length!==0 ? (
-              <div>
-                <div className="chatBoxTop">
-                  {messages.map((m) => {
-                    return (
-                      <div ref={scrollRef} >
-                        <Message message={m} own={m.sender === user._id} />
-                      </div>
-                    )
-                  })}
+                {/*chatBox*/}
+                <div className="chatBox" style={{display:"flex",justifyContent:"space-between",padding:"5px 20px 5px 20px"}}>
+                { Docbar===false ? (<span>ChatBox</span>):(<span>Documents</span>)}
+                <span onClick={() => setDocbar(!Docbar)} style={{padding:"0 5px 0 5px",cursor:"pointer"}} >--&gt;</span>
                 </div>
-                </div>
-            ) : (
-              <div className="noConversationText">
-                Discuss here...
-              </div>
-            )}
-            <div className="chatBoxBottom">
-          <textarea class="form__input" id="name" onChange={(e) => setNewMessage(e.target.value)} value={newMessage} placeholder="write something..."/>
-                  <button className="chatSubmitButton" onClick={handleSubmit}>
-                    Send
-                  </button>
-                </div>
-              
-            </div>
 
-            </div>
+                { Docbar===false ? (<div className="chatBox" style={{padding:"0 20px 10px 20px"}}>
+                {messages.length!==0 ? (
+                    <div>
+                    <div className="chatBoxTop">
+                      {messages.map((m) => {
+                        return (
+                          <div ref={scrollRef} >
+                            <Message message={m} own={m.sender === user._id} />
+                          </div>
+                        )
+                      })}
+                    </div>
+                    </div>
+                ) : (
+                  <div className="noConversationText">
+                    Discuss here...
+                  </div>
+                )}
+                <div className="chatBoxBottom">
+                    <textarea class="form__input" id="name" onChange={(e) => setNewMessage(e.target.value)} value={newMessage} placeholder="write something..."/>
+                    <button className="chatSubmitButton" onClick={handleSubmit}>
+                      Send
+                    </button>
+                </div>
+                </div>):(<div className="chatBox" style={{padding:"0 20px 10px 20px"}}>
+                {docShow.length!==0 ? (
+                  <div>
+                  <div className="chatBoxTop">
+                    {docShow.map((m) => {
+                      return (
+                        <div>
+                         <Document document={m}></Document>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  </div>
+              ) : (
+                <div className="noConversationText">
+                  Discuss here...
+                </div>
+              )}
+                    <div className="chatBoxBottom">
+                   <input type="file" style={{border:"2px solid black",width:"250px"}} onChange={handleFile}></input>
+                    <button onClick={SubmitFile}  className="chatSubmitButton">
+                     Submit
+                    </button>
+                </div>
+                  </div>)}
+                
+                
+            
+
+        </div>
         
         </div>
 

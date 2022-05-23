@@ -38,7 +38,7 @@ const userSchema=new mongoose.Schema( {
     // team_tasks:[{type:mongoose.Schema.Types.ObjectId,ref:'task'}],
     heatmap:[[Number]],
     profilePic:String,
-    document:Buffer
+    document:[[String]]
 },{
     timestamps:true
 });

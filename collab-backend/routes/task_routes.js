@@ -42,6 +42,7 @@ router.post("/searchTasks",auth,async(req,res)=>{
     }
 })
 
+
 router.post("/addTask",auth,async(req,res)=>{
     try{
     const newTask=req.body;

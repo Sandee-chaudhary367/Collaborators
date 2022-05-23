@@ -59,7 +59,6 @@ const Profile=({user})=>{
     formData.append('_id',user._id)
     try{
     const res=await axios.post(API_URL + "addProfilePic",formData,{ headers: authHeader()});
-    console.log(res)
     window.location.reload();
     }catch(e){
       console.log(e);
@@ -82,7 +81,7 @@ const Profile=({user})=>{
        
         <div className="form-group-sm mb-3">
           <label >Photo</label><br/>
-          <input type="file" name="Photo" style={{border:"black 2px solid"}} onChange={handlePhoto} className="custom-file-input" name="Photo"/>
+          <input type="file" name="Photo" style={{border:"black 2px solid"}} onChange={handlePhoto} className="custom-file-input" />
           <button onClick={SubmitPhoto} style={{height:"38px",margin:"0 0 0 10px"}} class="btn btn-secondary bg-primary" type="button">Upload</button>
           </div>
       </form>
