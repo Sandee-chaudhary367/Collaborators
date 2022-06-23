@@ -4,11 +4,12 @@ import {API_URL} from "../../variables"
 import {PartnerImage} from "./document.styles.js"
 
 let Document =({document,own}) => {
+  //console.log(document)
   return (
     <div className={own ? "document own" : "document"}>
       <div className="documentTop">
         <PartnerImage src={`${API_URL}getProfilepic/Image/${document.uploader}`}/>
-        <div className="documentText">{document.fileName}</div>
+        <div className="documentText"><a href={`D:\ReactDevelopment\Collaborators\${document.path}`}>{document.fileName}</a></div>
       </div>
       <div className="documentBottom">
       <div style={{padding:"0 10px 0 0"}}>-{format(document.createdAt)}</div>

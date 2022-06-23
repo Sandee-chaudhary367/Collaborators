@@ -6,6 +6,7 @@ requestRoutes=require("./routes/request_routes")
 messageRoutes=require("./routes/message_routes")
 subTaskRoutes=require("./routes/subtask_routes")
 documentRoutes=require("./routes/documents_routes")
+logRoutes=require("./routes/logs_routes")
 const task = require('./models/task');
 const app = express();
 var multer = require('multer');
@@ -26,6 +27,7 @@ app.use(subTaskRoutes);
 app.use(requestRoutes);
 app.use(messageRoutes);
 app.use(documentRoutes);
+app.use(logRoutes);
 
 
 var storage = multer.diskStorage({

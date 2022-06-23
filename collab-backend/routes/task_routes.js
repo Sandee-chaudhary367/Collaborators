@@ -22,6 +22,21 @@ function addDays(dateObj, numDays) {
     return dateObj;
  }
 
+    router.post("/updateProgress/",auth,async(req,res)=>{
+        try{
+        const _id=req.body.taskId
+        //console.log(_id);
+        const user_id=req.user._id 
+        const Task=await task.findOneAndUpdate({_id:_id},{
+            completion:req.body.completion});
+
+        res.send()
+        }catch(e){
+            console.log(e);
+            res.status(400).send(e);
+        }
+    });
+
 router.post("/searchTasks",auth,async(req,res)=>{
     try{
         const _id=req.user._id
@@ -29,7 +44,6 @@ router.post("/searchTasks",auth,async(req,res)=>{
         const searchString=req.body.searchString;
         var query = {};
         query["topic"] =searchString;
-        console.log(query)
         const userAllTasks=await task.find({
             $and : [{ $or:[{"owner" : _id},{"partner": _id}]},query]
         });
@@ -260,7 +274,6 @@ router.get("/collabTasks",auth,async(req,res)=>{
 
 router.delete("/deleteTasks/:_id",auth,async(req,res)=>{
     try{
-      console.log(req.params._id)
      let task_id=req.params._id;
      await task.deleteOne({_id:task_id});
      res.send("Done");

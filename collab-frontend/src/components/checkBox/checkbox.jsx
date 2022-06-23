@@ -1,4 +1,5 @@
 import "./checkbox.css"
+import { connect } from "react-redux";
 import { useEffect,useState } from "react";
 import axios from "axios";
 import {API_URL} from "../../variables"
@@ -11,10 +12,14 @@ function authHeader(){
   }
 }
 
-let CheckBox=(taskId)=>{
+let CheckBox=(props)=>{
+    let user=props.user;
+    let taskId=props.taskId;
+    let taskName=props.taskName;
     const [onAddSubtask, setonAddSubtask] = useState(false);
     const [newSubTask, setNewSubTask] = useState("");
     const [newSubTaskArr, setNewSubTaskArr] = useState([]);
+    const [progress, setProgress] = useState([]);
 
     let timeofCompletion=(com)=>{
         if(com.completion){
@@ -24,9 +29,31 @@ let CheckBox=(taskId)=>{
         }
     }
 
+    let completed=(SubTaskArr)=>{
+      let done=0;
+      if(!SubTaskArr){
+        return 0;
+      }
+      if(SubTaskArr.length===0){
+        return 0;
+      }
+      SubTaskArr.forEach((ele)=>{
+          if(ele.completion){
+              done=done+1;
+          }
+      })
+      let completed=parseInt(((done)/(SubTaskArr.length))*100);
+      
+      return completed;
+    }
+
     let getSubTasks=async () => {
-      const response=await axios.get(API_URL + "myAllsubTasks/"+taskId.taskId,{ headers: authHeader() });
+      const response=await axios.get(API_URL + "myAllsubTasks/"+taskId,{ headers: authHeader() });
       setNewSubTaskArr(response.data);
+      let pro=completed(response.data);
+      console.log(pro)
+      const response2=await axios.post(API_URL + "updateProgress/",{taskId,completion:pro},{ headers: authHeader() });
+      setProgress(pro);
     }
 
     useEffect(() => {
@@ -37,6 +64,14 @@ let CheckBox=(taskId)=>{
       try{
          console.log(e.target.id)
           const res = await axios.delete(API_URL + "deleteSubTasks/"+e.target.id,{ headers: authHeader() });
+          let objforlog={
+            subtask_Id:e.target.id,
+            user_Id:user._id,
+            taskId:taskId,
+            createdAt:new Date(),
+            message:`Subtask-${e.target.getAttribute("description")} of task-${taskName} is deleted`
+          }
+          let res3=await axios.post(API_URL + "addlog",objforlog,{ headers: authHeader() });
           getSubTasks();
         }catch(err){
           console.log(err);
@@ -45,9 +80,16 @@ let CheckBox=(taskId)=>{
 
     const completionfn1= async (e) => {
       try{
-      console.log(e.target.id)
         const res = await axios.put(API_URL + "subTasksCompletionToTrue/"+e.target.id,null,{ headers: authHeader() });
         const res1 = await axios.put(API_URL + "changeHeatdataOntrue",null,{ headers: authHeader() });
+        let objforlog={
+          subtask_Id:e.target.id,
+          user_Id:user._id,
+          taskId:taskId,
+          createdAt:new Date(),
+          message:`Subtask-${e.target.innerText} of task-${taskName} is Completed.`
+        }
+        let res3=await axios.post(API_URL + "addlog",objforlog,{ headers: authHeader() });
         getSubTasks();
       }catch(err){
         console.log(err);
@@ -60,6 +102,14 @@ let CheckBox=(taskId)=>{
         const res = await axios.put(API_URL + "subTasksCompletionToFalse/"+e.target.id,null,{headers: authHeader()});
         let aa={end:res.data.end};
         const res1 = await axios.put(API_URL + "changeHeatdataOnfalse",aa,{ headers: authHeader() });
+        let objforlog={
+          subtask_Id:e.target.id,
+          user_Id:user._id,
+          taskId:taskId,
+          createdAt:new Date(),
+          message:`Subtask-${e.target.innerText} of task-${taskName} is marked uncompleted`
+        }
+        let res3=await axios.post(API_URL + "addlog",objforlog,{ headers: authHeader() });
         getSubTasks();
       }catch(err){
         console.log(err);
@@ -82,14 +132,25 @@ let CheckBox=(taskId)=>{
         e.preventDefault();
         let subtaskobj={
           description:newSubTask,
-          taskId:taskId.taskId,
+          taskId:taskId,
           completion:false,
           start:new Date(),
           end:null
         }
+        
         try {
           //console.log(subtaskobj);
           const res = await axios.post(API_URL + "addSubtask", subtaskobj,{ headers: authHeader() });
+          //console.log(res.data);
+          let objforlog={
+            subtask_Id:res.data._id,
+            user_Id:user._id,
+            taskId:taskId,
+            createdAt:new Date(),
+            message:`Subtask-${res.data.description} is added in task-${taskName}`
+          }
+          console.log(objforlog);
+          let res3=await axios.post(API_URL + "addlog",objforlog,{ headers: authHeader() });
           getSubTasks();
           setNewSubTask("");
         } catch (err) {
@@ -111,7 +172,7 @@ let CheckBox=(taskId)=>{
             
             <div class="ccl" style={{display:"flex",justifyContent:"space-between"}} ><div id={ele._id} onClick={completionfn2} >{ele.description}</div>
             <div>{timeofCompletion(ele)}</div>
-            <div id={ele._id} style={{padding:" 0 10px"}} onClick={deleteSubTasks} >X</div>
+            <div id={ele._id} description={ele.description} style={{padding:" 0 10px"}} onClick={deleteSubTasks} >X</div>
             </div>
             
           </>
@@ -129,12 +190,13 @@ let CheckBox=(taskId)=>{
               if(ele.completion){
                 return;
               }
-              return <>
-              <div class="ccl" style={{display:"flex",justifyContent:"space-between"}} ><div id={ele._id} onClick={completionfn1} >{ele.description}</div>
+              return (<div>
+              <div class="ccl" style={{display:"flex",justifyContent:"space-between"}}>
+              <div id={ele._id} onClick={completionfn1} >{ele.description}</div>
               <div>{timeofCompletion(ele.completion)}</div>
-              <div id={ele._id} style={{padding:" 0 10px"}} onClick={deleteSubTasks}>X</div>
+              <div id={ele._id} description={ele.description} style={{padding:" 0 10px"}} onClick={deleteSubTasks}>X</div>
               </div>
-              </>
+              </div>)
             })}
         </div>
         </div>

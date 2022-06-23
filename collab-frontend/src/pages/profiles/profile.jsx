@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import axios from "axios";
 import CalendarHeatmap from 'react-calendar-heatmap';
@@ -28,6 +28,17 @@ function authHeader() {
 const Profile=({user})=>{
   let heatmap=user.heatmap;
   let array=[];
+  let [logs,setlogs]=useState([]);
+
+  let getLogs=async () => {
+    const response=await axios.get(API_URL + "returnlog",{ headers: authHeader() });
+    //console.log(response.data);
+    setlogs(response.data.logs.reverse());
+  }
+
+  useEffect(() => {
+      getLogs();
+  }, []);
 
   for(let i=0;i<12;i++){
     for(let j=0;j<heatmap[i].length;j++){
@@ -35,7 +46,7 @@ const Profile=({user})=>{
        let mm=i+1;
        let dd=j+1;
        let val=heatmap[i][j];
-       console.log(year+"-"+mm+"-"+dd+":"+val);
+      // console.log(year+"-"+mm+"-"+dd+":"+val);
        if(val===0){
          continue;
        }
@@ -107,27 +118,18 @@ const Profile=({user})=>{
     </div>
 
     <div style={{margin:'40px 0px'}}  >
-    <div class="card">
-    <h5 class="card-title">Last 10 Task Completed</h5>
-    <div style={{height:"400px"}} >
-    <h5>
-    Mini task 1 Completed
-    </h5>
-    <h5 >
-    Mini task 1 Completed
-    </h5> 
-    <h5 >
-    Mini task 1 Completed
-    </h5> 
-    <h5 >
-    Mini task 1 Completed
-    </h5> 
-    <h5 >
-    Mini task 1 Completed
-    </h5> 
-    <h5 >
-    Mini task 1 Completed
-    </h5> 
+    <div class="card" style={{padding:'10px 10px'}}>
+    <h5 class="card-title" style={{padding:"7px 0",borderBottom:"solid 2px black"}}>Work Updates</h5>
+    <div style={{height:"400px",overflowY:"scroll"}} >
+    {
+      logs && logs.map((ele,i)=>{
+        return(
+          <p style={{padding:"7px 0",}}>
+          {`${i+1}.  ${ele.message}`}
+          </p>
+        )
+      })
+    } 
     </div>                             
 
     </div>

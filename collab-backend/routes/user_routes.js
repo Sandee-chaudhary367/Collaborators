@@ -2,6 +2,7 @@ const express = require('express');
 const auth = require('../middleware/auth');
 const user = require('../models/user');
 // const upload=require("../index");
+const log=require("../models/logs");
 const heatmap=require("../models/heatmap");
 
 const router=new express.Router();
@@ -248,7 +249,13 @@ router.post("/signup",async(req,res)=>{
     let newUserReturnable=newUser.toJSON();
     newUserReturnable.Token=token;
     let userId = newUserReturnable._id;
-    
+    console.log(userId);
+    let logobj={
+        user:userId,
+        logs:[]
+    }
+    let newlog=new log(logobj);
+    await newlog.save();
     let htdata={
         userId,
         data:htMatrix

@@ -20,6 +20,7 @@ function authHeader(){
 }
 
 const Taskbox=({match,user})=>{
+  // console.log(user);
     let [data,setData]=useState(null);
     let [loading,setLoading]=useState(false);
     let [messages,setMessages]=useState([]);
@@ -202,7 +203,7 @@ const Taskbox=({match,user})=>{
             }
             
             <div className="CheckBox">
-                <CheckBox taskId={match.params._id} ></CheckBox>
+                <CheckBox taskId={match.params._id} taskName={data==null?"loading":data.topic} user={user}></CheckBox>
             </div>
            
             </div>
