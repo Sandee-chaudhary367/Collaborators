@@ -1,4 +1,5 @@
 const express = require("express");
+require('dotenv').config();
 require('./db/mongoose')
 userRoutes=require("./routes/user_routes")
 taskRoutes=require("./routes/task_routes")
@@ -15,7 +16,7 @@ const auth=require("./middleware/auth");
 const user = require('./models/user');
 const { db } = require("./models/user");
 var corsOptions = {
-    origin:"https://deep-collaborators.herokuapp.com/"
+    origin: "http://localhost:3000"
 }
 app.use(cors(corsOptions));
 const PORT = process.env.PORT || 3001;
@@ -29,12 +30,12 @@ app.use(messageRoutes);
 app.use(documentRoutes);
 app.use(logRoutes);
 
-var express = require('express');  
-var router = express.Router();
-router.get("",(req,res)=>{
-    console.log("Welcome")
-    res.send("Welcome");
-})
+// var express = require('express');  
+// var router = express.Router();
+// router.get("",(req,res)=>{
+//     console.log("Welcome")
+//     res.send("Welcome");
+// })
 
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
