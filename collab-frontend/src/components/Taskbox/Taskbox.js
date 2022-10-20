@@ -38,16 +38,22 @@ const Taskbox=({match,user})=>{
     }
 
     let SubmitFile=async()=>{
-      console.log(file.name);
       let ss=file.name.split(".");
       let fileName=ss[0];
-      console.log(fileName);
-
+      console.log(file);
+      console.log(data._id);
       const formData = new FormData();
+      //const formData={'myFile':file,'_id':data._id}
       formData.append('myFile', file);
       formData.append('_id',data._id);
+      for (let [key, value] of formData) {
+        console.log(`${key}: ${value}`)
+      }
       try{
-      const res=await axios.post(API_URL + "addFile",formData,{ headers: authHeader()});
+      let authHeade=authHeader();
+      authHeade['Content-Type']="multipart/form-data";
+      console.log(authHeade)
+       const res=await axios.post(API_URL + "addFile",formData,{ authHeade});
       let documentobj={
         path:res.data.document[res.data.document.length-1],
         type:file.type,
@@ -57,7 +63,7 @@ const Taskbox=({match,user})=>{
         fileName
       }
       await axios.post(API_URL + "addDocument",documentobj,{ headers: authHeader()});
-      window.location.reload();
+       window.location.reload();
       }catch(e){
         console.log(e);
       }
@@ -259,7 +265,7 @@ const Taskbox=({match,user})=>{
                 </div>
               )}
                     <div className="chatBoxBottom">
-                   <input type="file" style={{border:"2px solid black",width:"250px"}} onChange={handleFile}></input>
+                   <input type="file" name="myFile" style={{border:"2px solid black",width:"250px"}} onChange={handleFile}></input>
                     <button onClick={SubmitFile}  className="chatSubmitButton">
                      Submit
                     </button>

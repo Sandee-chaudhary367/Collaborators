@@ -32,6 +32,16 @@ router.get("/documents/:taskId", async (req, res) => {
     }
 }); 
 
+router.get("/getDocuments/File/:path",async(req,res)=>{
+  try{
+     let Imagepath="D:/ReactDevelopment/Collaborators/File/"+req.params.path;
+     console.log(Imagepath);
+     res.sendFile(Imagepath);
+  }catch(e){
+      console.log(e);
+  }
+})
+
 router.get("/userdocuments/:_id", async (req, res) => {
   try {
     

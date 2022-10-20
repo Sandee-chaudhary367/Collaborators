@@ -15,6 +15,7 @@ const cors = require("cors");
 const auth=require("./middleware/auth");
 const user = require('./models/user');
 const { db } = require("./models/user");
+const bodyParser = require("body-parser");
 var corsOptions = {
     origin: "http://localhost:3000"
 }
@@ -30,21 +31,26 @@ app.use(messageRoutes);
 app.use(documentRoutes);
 app.use(logRoutes);
 
-
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './Image/')
     },
     filename: (req, file, cb) => {
-        cb(null, `${req.user._id}`)
+        const ext = file.mimetype.split("/")[1];
+        cb(null, `${req.user._id}.${ext}`)
     }
 });
 
 let storagefile = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './File/')
+    },
+    filename: (req, file, cb) => {
+        console.log("hrlloodnfnf")
+        console.log(JSON.stringify(req.body))
+        const ext = file.mimetype.split("/")[1];
+        cb(null, `${file.fieldname}-${Date.now()}.${ext}`)
     }
-    //for now filename is randomly genrated 
 });
  
 // const fileFilter = (req, file, cb) => {
@@ -73,8 +79,9 @@ userRoutes.post('/addProfilePic',[auth,upload.single("ProfilePic")],async(req, r
 
 taskRoutes.post('/addFile',uploadfiles.single("myFile"),async(req, res) => {
     try{
-        
+        console.log("88888");
         console.log(req.file);
+        console.log(JSON.stringify(req.body));
         let obj= await task.findByIdAndUpdate(req.body._id, {$push:{document:req.file.path}},{useFindAndModify: false});
         obj.document.push(req.file.path);
         console.log(obj);
