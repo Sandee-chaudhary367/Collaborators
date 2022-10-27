@@ -17,12 +17,14 @@ const user = require('./models/user');
 const { db } = require("./models/user");
 const bodyParser = require("body-parser");
 var corsOptions = {
-    origin: "http://localhost:3000"
+    //origin: "http://localhost:3000"
+    origin:"https://deep-collaborators.herokuapp.com/"
 }
 app.use(cors(corsOptions));
 const PORT = process.env.PORT || 3001;
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.json())
+//app.use(express.static(path.resolve(__dirname, '../collab-frontend/build')));
 app.use(userRoutes);
 app.use(taskRoutes);
 app.use(subTaskRoutes);
@@ -99,4 +101,5 @@ taskRoutes.post('/addFile',uploadfiles.single("myFile"),async(req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
+  console.log("Helo "+`${process.env.PORT}`);
 });
