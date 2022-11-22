@@ -4,6 +4,7 @@ import PreviewTasks from "../../components/homepage's-PreviewTasks/previewTasks"
 
 
 const HomePage = ()=>{
+    
     let [whichtoshowbar,setWhichToShowBar]=useState(false);
     let [L1,setL1]=useState(1);
     let contentArea={
@@ -46,12 +47,11 @@ const HomePage = ()=>{
      {!whichtoshowbar && <div style={contentArea}>
         <PreviewTasks/>
         <PreviewProfile/>
-     </div> }
+     </div>}
      
      {whichtoshowbar && <div style={contentArea}>
         {L1===1?<PreviewTasks/>:<PreviewProfile/>}
-       
-     </div> } 
+     </div> }
 
      </div>
     )

@@ -23,6 +23,7 @@ const Content =({closeSidebar,sidebar})=>{
         <div style={contentArea}>
         {sidebar && <h2 onClick={openClosebar} style={{position:"fixed",top:"11.5%"}}>{">"}</h2>}
         <Switch>
+        
         <PrivateRoutes exact path='/' component={homepage} />
         <PrivateRoutes exact path='/team' component={friend} />
         <PrivateRoutes exact path='/analytics' component={profile} />

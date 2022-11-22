@@ -15,9 +15,9 @@ const cors = require("cors");
 const auth=require("./middleware/auth");
 const user = require('./models/user');
 const { db } = require("./models/user");
-const bodyParser = require("body-parser");
 var corsOptions = {
     origin: "http://localhost:3000"
+   // origin:"https://deep-collaborators.herokuapp.com/"
 }
 app.use(cors(corsOptions));
 const PORT = process.env.PORT || 3001;
@@ -37,7 +37,7 @@ var storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         const ext = file.mimetype.split("/")[1];
-        cb(null, `${req.user._id}.${ext}`)
+        cb(null, `${req.user._id}`)
     }
 });
 
@@ -99,4 +99,5 @@ taskRoutes.post('/addFile',uploadfiles.single("myFile"),async(req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
+ // console.log("Helo "+`${process.env.PORT}`);
 });

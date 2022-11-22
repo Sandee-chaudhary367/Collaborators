@@ -46,6 +46,7 @@ const HomeScreen=({addtask,user,setTasks})=>{
   window.addEventListener('resize', updateDimensions)
 
 useEffect(updateDimensions,[]);
+
   const AddPartnerHandler=async(e)=>{
     let email=textInput.current.value;
     console.log(email)
