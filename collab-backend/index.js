@@ -23,6 +23,7 @@ app.use(cors(corsOptions));
 const PORT = process.env.PORT || 3001;
 app.use(express.urlencoded({ extended: true })); 
 app.use(express.json())
+//app.use(express.static(path.resolve(__dirname, '../collab-frontend/build')));
 app.use(userRoutes);
 app.use(taskRoutes);
 app.use(subTaskRoutes);
